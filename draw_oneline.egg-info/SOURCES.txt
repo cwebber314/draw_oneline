@@ -1,0 +1,7 @@
+setup.py
+draw_oneline.egg-info/PKG-INFO
+draw_oneline.egg-info/SOURCES.txt
+draw_oneline.egg-info/dependency_links.txt
+draw_oneline.egg-info/entry_points.txt
+draw_oneline.egg-info/requires.txt
+draw_oneline.egg-info/top_level.txt

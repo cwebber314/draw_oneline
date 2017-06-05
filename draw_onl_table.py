@@ -39,7 +39,11 @@ def identify_layout(rows):
     """
     locs = [row['loc'] for row in rows]
     max_loc = max(locs)
-    if max_loc > 300:
+    if max_loc >= 500:
+        raise ValueError
+    if max_loc > 400:
+        layout = 'triple'
+    elif max_loc > 300:
         layout = 'double'
     else:
         layout = 'single'
@@ -95,7 +99,14 @@ def draw_leg(d, rows, start_loc=None, direction=None):
             raise ValueError("Invalid Equipment Class")
     return d
 
+def draw_triple(rows, out, orientation='left'):
+    """
+    """
+    return
+
 def draw_double(rows, out, orientation='left'):
+    """
+    """
     leg1 = get_rows(rows, 100)
     leg2 = get_rows(rows, 200)
     leg3 = get_rows(rows, 300)
@@ -147,20 +158,22 @@ def draw_branch(rows, out, orientation='left'):
     rows = clean_csv(rows)
     layout_type = identify_layout(rows)
     if layout_type == 'single':
-        draw_single(rows, out)
+        draw_single(rows, out, orientation)
     elif layout_type == 'double':
-        draw_double(rows, out)
+        draw_double(rows, out, orientation)
 
 def main():
     op = ArgumentParser()
     op.add_argument('csv', help='CSV input file')
     op.add_argument('out', help='output image')
+    op.add_argument('-s', '--side', default='left', choices=['left', 'right'],
+                    help='which side of the diagram is the branch on? left or right')
     args = op.parse_args()
 
     csv_fn = args.csv
     reader = csv.DictReader(open(csv_fn, 'r'))
     rows = [row for row in reader]
-    draw_branch(rows, args.out)
+    draw_branch(rows, args.out, orientation=args.side)
 
 if __name__ == '__main__':
     sys.exit(main())
