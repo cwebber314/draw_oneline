@@ -8,7 +8,7 @@ _rh = 0.25      # Resistor height
 _rw = 1.0 / 6   # Fuxx (inner) xength of resistor is 1.0 data unit
 
 sh = 1.0/12 # 1/2 subcond height
-sw = 0.75 # 1/2 subcond width height
+sw = 0.5 # 1/2 subcond width
 
 bw = 1.0/12 #  bus width
 x = 0.25
@@ -59,7 +59,7 @@ CT = {
     'shapes' : _ind_shape_list }
 
 # Vertical Bus
-bh = 0.5  # half of bus height
+bh = 0.75  # half of bus height
 BUS = {
     'name'  : 'BUS',
     'anchors' : { 'center' : [0,0] },

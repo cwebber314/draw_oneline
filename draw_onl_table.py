@@ -70,7 +70,7 @@ def draw_leg(d, rows, start_loc=None, direction=None):
     d.add(e.LINE, l=0.1, d=direction, xy=start_loc)
     for row in sorted_rows:
         alpha = row['alpha']
-        loc = row['loc']
+        loc = str(row['loc'])
         if row['element'] == 'subcond':
             ee = d.add(onl.SUBCOND, d=direction)
             ee.add_label(alpha, loc='top')
@@ -105,7 +105,7 @@ leg3 = get_rows(rows, 300)
 
 d = schem.Drawing(unit=2)
 dot = d.add(e.DOT)
-ee = d.add(e.LINE, d='up')
+ee = d.add(e.LINE, d='up', l=4.5)
 leg2_start = ee.end
 
 d = draw_leg(d, leg1, start_loc=dot.start, direction='left')
@@ -114,4 +114,4 @@ d = draw_leg(d, leg3, start_loc=dot.start, direction='right')
 
 d.draw(showplot=False)
 d.save('table_oneline.svg')
-#d.save('oneline.png')
+d.save('table_oneline.png')
