@@ -1,4 +1,5 @@
 element,alpha,loc
+bus,G,150
 subcond,A,145
 switch,B,140
 CT,C,135
@@ -8,6 +9,7 @@ CT,D,120
 CT,C,115
 switch,B,110
 subcond,A,105
+bus,G,250
 subcond,A,245
 switch,B,240
 CT,C,235

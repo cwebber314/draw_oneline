@@ -11,8 +11,8 @@ sh = 1.0/12 # 1/2 subcond height
 sw = 0.75 # 1/2 subcond width height
 
 bw = 1.0/12 #  bus width
+x = 0.25
 
-x = 2*_sh
 BREAKER = {
 # based on RBOX
     'name'  : 'BREAKER',
@@ -59,13 +59,15 @@ CT = {
     'shapes' : _ind_shape_list }
 
 # Vertical Bus
+bh = 0.5  # half of bus height
 BUS = {
     'name'  : 'BUS',
     'anchors' : { 'center' : [0,0] },
     'shapes'  : [ { 'shape':'poly',
-                    'xy'   : _np.array([[-bw,1.5], [-bw,-1.5], [bw,-1.5], [bw, 1.5] ]),
+                    'xy'   : _np.array([[-bw,bh], [-bw,-bh], [bw,-bh], [bw, bh] ]),
                     'fill' : True } ],
     'anchors' : { 'center' : [0,0] },
+    'extend' : False
     }
 
 # Based on SWITCH_SPST
