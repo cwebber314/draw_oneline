@@ -4,11 +4,12 @@ Draw oneline from a rather specific CSV table that describes a circuit.
 import csv
 import os
 import os.path as osp
-from functools import partial
+import sys
 
 import SchemDraw as schem
 import SchemDraw.elements as e
 import oneline_elements as onl
+from argparse import ArgumentParser
 
 def clean_csv(rows):
     """
@@ -17,11 +18,6 @@ def clean_csv(rows):
     for i in range(len(rows)):
         rows[i]['loc'] = int(rows[i]['loc'])
     return rows
-
-fn = 'oneline_table.csv'
-reader = csv.DictReader(open(fn, 'r'))
-rows = [row for row in reader]
-rows = clean_csv(rows)
 
 def get_rows(rows, which):
     """
@@ -99,19 +95,72 @@ def draw_leg(d, rows, start_loc=None, direction=None):
             raise ValueError("Invalid Equipment Class")
     return d
 
-leg1 = get_rows(rows, 100)
-leg2 = get_rows(rows, 200)
-leg3 = get_rows(rows, 300)
+def draw_double(rows, out, orientation='left'):
+    leg1 = get_rows(rows, 100)
+    leg2 = get_rows(rows, 200)
+    leg3 = get_rows(rows, 300)
 
-d = schem.Drawing(unit=2)
-dot = d.add(e.DOT)
-ee = d.add(e.LINE, d='up', l=4.5)
-leg2_start = ee.end
+    d = schem.Drawing(unit=2)
+    dot = d.add(e.DOT)
+    ee = d.add(e.LINE, d='up', l=4.5)
+    leg2_start = ee.end
 
-d = draw_leg(d, leg1, start_loc=dot.start, direction='left')
-d = draw_leg(d, leg2, start_loc=leg2_start, direction='left')
-d = draw_leg(d, leg3, start_loc=dot.start, direction='right')
+    if orientation == 'left':
+        d1 = 'left'
+        d2 = 'left'
+        d3 = 'right'
+    elif orientation == 'right':
+        d1 = 'right'
+        d2 = 'right'
+        d3 = 'left'
 
-d.draw(showplot=False)
-d.save('table_oneline.svg')
-d.save('table_oneline.png')
+    d = draw_leg(d, leg1, start_loc=dot.start, direction=d1)
+    d = draw_leg(d, leg2, start_loc=leg2_start, direction=d2)
+    d = draw_leg(d, leg3, start_loc=dot.start, direction=d3)
+
+    d.draw(showplot=False)
+    d.save(out)
+
+def draw_single(rows, out, orientation='left'):
+    leg1 = get_rows(rows, 100)
+
+    if orientation == 'left':
+        d1 = 'left'
+    elif orientation == 'right':
+        d1 = 'right'
+    d = schem.Drawing(unit=2)
+    d = draw_leg(d, leg1, start_loc=[0,0], direction=d1)
+
+    d.draw(showplot=False)
+    d.save(out)
+
+def draw_branch(rows, out, orientation='left'):
+    """
+    Draw the branch.
+
+    Args:
+      rows (list of dicts): List of dictionaries of elements.
+      out (str): ouput filename
+      orientation (str): Either [left, right].  Which side of the drawing is this
+        on?  This controls where the busses are.
+    """
+    rows = clean_csv(rows)
+    layout_type = identify_layout(rows)
+    if layout_type == 'single':
+        draw_single(rows, out)
+    elif layout_type == 'double':
+        draw_double(rows, out)
+
+def main():
+    op = ArgumentParser()
+    op.add_argument('csv', help='CSV input file')
+    op.add_argument('out', help='output image')
+    args = op.parse_args()
+
+    csv_fn = args.csv
+    reader = csv.DictReader(open(csv_fn, 'r'))
+    rows = [row for row in reader]
+    draw_branch(rows, args.out)
+
+if __name__ == '__main__':
+    sys.exit(main())
