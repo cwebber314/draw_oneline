@@ -1,3 +1,0 @@
-[console_scripts]
-csv_to_online = draw_onl_table:main
-
