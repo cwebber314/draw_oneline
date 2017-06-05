@@ -31,4 +31,4 @@ wavetrap,F,310
 
 Could produce an image like:
 
-![Example oneline from table](table_oneline.svg)
+![Example oneline from table](table_oneline.png)
