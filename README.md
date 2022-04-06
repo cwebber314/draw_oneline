@@ -1,7 +1,8 @@
 # Draw electrical onelines
 This projects uses SchemDraw to draw station to station onelines.
 
-For example a table with a sudo-topology like:
+For example a table with a sudo-topology like this (note this format came from an upstream source and is stupid. 
+You should use something like a netlist if you give a damn):
 
 ```csv
 element,alpha,loc
